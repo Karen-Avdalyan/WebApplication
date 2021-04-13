@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+    <UsingTask TaskName="CssCompressorTask" AssemblyFile="..\bin\$(ConfigurationName)\netcoreapp3.1\Yahoo.Yui.Compressor.MsBuild.dll" />
+    <UsingTask TaskName="JavaScriptCompressorTask" AssemblyFile="..\bin\$(ConfigurationName)\netcoreapp3.1\Yahoo.Yui.Compressor.MsBuild.dll" />
+
+  
+  <Target Name="Minify" Condition="'$(ConfigurationName)' == 'Release'">
+
+    <ItemGroup>
+      <!-- Single files, listed in order of dependency -->
+      <CssFiles Include="..\styles\Example1.css" />
+
+      <JavaScriptFiles Include="..\script\Example2.min.js">
+        <CompressionType>None</CompressionType>
+      </JavaScriptFiles>
+      <JavaScriptFiles Include="..\script\Example3.js"/>
+    </ItemGroup>
+
+    <CssCompressorTask
+          SourceFiles="@(CssFiles)"
+          DeleteSourceFiles="false"
+          OutputFile="..\styles\min.css"
+          CompressionType="Standard"
+          LoggingType="Info"
+          PreserveComments="false"
+          LineBreakPosition="-1"
+       />
+
+    <JavaScriptCompressorTask
+        SourceFiles="@(JavaScriptFiles)"
+        DeleteSourceFiles="false"
+        OutputFile="..\script\min.js"
+        CompressionType="Standard"
+        ObfuscateJavaScript="True"
+        PreserveAllSemicolons="False"
+        DisableOptimizations="No"
+        EncodingType="Default"
+        LineBreakPosition="-1"
+        LoggingType="Info"
+        ThreadCulture="en-au"
+        IsEvalIgnored="false"
+            />
+  </Target>
+</Project>
